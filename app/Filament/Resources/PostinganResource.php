@@ -57,18 +57,23 @@ class PostinganResource extends Resource
 
                     TextInput::make('slug')
                         ->label('Slug')
-                        ->unique(ignoreRecord: true)
                         ->columnSpanFull()
-                        ->unique()
+                        // ->unique()
+                        ->unique(ignoreRecord:true)
                         ->validationMessages([
                             'unique' => 'Slug Telah Terdaftar.',
                         ])
-                        // ->unique(ignoreRecord:true)
                         ->required(),
         
                     Select::make('kategori_id')
                         ->label('Kategori')
-                        ->options(kategori::all()->pluck('nama', 'id')),
+                        ->searchable()
+                        ->options(kategori::all()->pluck('nama', 'id')
+                    ),
+
+                    // Select::make('kategori_id')
+                    //     ->label('Kategori')
+                    //     ->relationship('Kategori', 'nama'),
                     
                     RichEditor::make('konten')
                         ->label('Isi Konten')
@@ -97,13 +102,54 @@ class PostinganResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('judul')->copyable()->copyMessage('Berhasil Menyalin')->searchable()->sortable()->toggleable(isToggledHiddenByDefault:false),
-                TextColumn::make('slug')->copyable()->copyMessage('Berhasil Menyalin')->searchable()->sortable()->toggleable(isToggledHiddenByDefault:true),
-                TextColumn::make('kategori.nama')->copyable()->copyMessage('Berhasil Menyalin')->searchable()->sortable()->toggleable(isToggledHiddenByDefault:false),
-                ImageColumn::make('sampul')->toggleable(isToggledHiddenByDefault:true),
-                CheckboxColumn::make('published')->label('on')->toggleable(isToggledHiddenByDefault:false),
-                TextColumn::make('created_at')->label('Dibuat')->copyable()->copyMessage('Berhasil Menyalin')->searchable()->sortable()->since()->dateTimeTooltip()->toggleable(isToggledHiddenByDefault:false),
-                TextColumn::make('updated_at')->label('Diubah')->copyable()->copyMessage('Berhasil Menyalin')->searchable()->sortable()->since()->dateTimeTooltip()->toggleable(isToggledHiddenByDefault:false),
+                TextColumn::make('judul')
+                    ->copyable()
+                    ->copyMessage('Berhasil Menyalin')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault:false),
+                    
+                TextColumn::make('slug')
+                    ->copyable()
+                    ->copyMessage('Berhasil Menyalin')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault:true),
+
+                TextColumn::make('kategori.nama')
+                    ->copyable()
+                    ->copyMessage('Berhasil Menyalin')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault:false),
+
+                ImageColumn::make('sampul')
+                    ->toggleable(isToggledHiddenByDefault:true),
+                    
+                CheckboxColumn::make('published')
+                    ->label('on')
+                    ->toggleable(isToggledHiddenByDefault:false),
+
+                TextColumn::make('created_at')
+                    ->label('Dibuat')
+                    ->copyable()
+                    ->copyMessage('Berhasil Menyalin')
+                    ->searchable()
+                    ->sortable()
+                    ->since()
+                    ->dateTimeTooltip()
+                    ->toggleable(isToggledHiddenByDefault:false),
+
+                TextColumn::make('updated_at')
+                    ->label('Diubah')
+                    ->copyable()
+                    ->copyMessage('Berhasil Menyalin')
+                    ->searchable()
+                    ->sortable()
+                    ->since()
+                    ->dateTimeTooltip()
+                    ->toggleable(isToggledHiddenByDefault:false),
+
             ])
             ->filters([Tables\Filters\TrashedFilter::make()])
             ->actions([
