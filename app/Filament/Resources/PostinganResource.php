@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
 use Filament\Tables;
 use App\Models\kategori;
 use Filament\Forms\Form;
@@ -13,7 +12,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Checkbox;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Validation\Rules\Unique;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
@@ -22,7 +20,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\CheckboxColumn;
 use App\Filament\Resources\PostinganResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\PostinganResource\RelationManagers;
 
 class PostinganResource extends Resource
 {
@@ -39,35 +36,23 @@ class PostinganResource extends Resource
                     TextInput::make('judul')
                         ->label('Judul Postingan')
                         ->columnSpanFull()
-
-                        // validasi
-                        
-                        // min dan max
-                        // ->minLength(5)
-                        // ->maxLength(2)
-                        // ->rules('min:3|max:5')
-                        
-                        // isian tertentu
-                        // ->rules(['in:hai,alo,hola']) 
-
-                        // isian tertentu
-                        // ->in(['hai', 'hi', 'ho']) 
-
                         ->required(),
 
-                    TextInput::make('slug')
-                        ->label('Slug')
-                        ->columnSpanFull()
-                        // ->unique()
-                        ->unique(ignoreRecord:true)
-                        ->validationMessages([
-                            'unique' => 'Slug Telah Terdaftar.',
-                        ])
-                        ->required(),
+                        // validasi = min dan max ->minLength(5) ->maxLength(2) ->rules('min:3|max:5') isian tertentu ->rules(['in:hai,alo,hola']) ->in(['hai', 'hi', 'ho']) 
+
+                    // TextInput::make('slug')
+                    //     ->label('Slug')
+                    //     ->columnSpanFull()
+                    //     // ->unique()
+                    //     ->unique(ignoreRecord:true)
+                    //     ->validationMessages([
+                    //         'unique' => 'Slug Telah Terdaftar.',
+                    //     ])
+                    //     ->required(),
         
                     Select::make('kategori_id')
                         ->label('Kategori')
-                        ->searchable()
+                        // ->searchable()
                         ->options(kategori::all()->pluck('nama', 'id')
                     ),
 
@@ -82,10 +67,10 @@ class PostinganResource extends Resource
                         ->required(),
                     
                     Checkbox::make('published')
-                        ->columnSpan(1),
-                        // ->required(),
+                        ->columnSpan(1)
+                        ->required(),
                          
-                    FileUpload::make('sampul')->disk('public')->directory('sampul'),
+                    FileUpload::make('sampul')->disk('public')->directory('sampul')->required(),
                 ]),
 
                 // FileUpload::make('sampul')->disk('public')->directory('sampul'),
@@ -107,7 +92,8 @@ class PostinganResource extends Resource
                     ->copyMessage('Berhasil Menyalin')
                     ->searchable()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault:false),
+                    ->toggleable(isToggledHiddenByDefault:false)
+                    ,
                     
                 TextColumn::make('slug')
                     ->copyable()
@@ -125,10 +111,6 @@ class PostinganResource extends Resource
 
                 ImageColumn::make('sampul')
                     ->toggleable(isToggledHiddenByDefault:true),
-                    
-                CheckboxColumn::make('published')
-                    ->label('on')
-                    ->toggleable(isToggledHiddenByDefault:false),
 
                 TextColumn::make('created_at')
                     ->label('Dibuat')
@@ -148,6 +130,10 @@ class PostinganResource extends Resource
                     ->sortable()
                     ->since()
                     ->dateTimeTooltip()
+                    ->toggleable(isToggledHiddenByDefault:false),
+                
+                CheckboxColumn::make('published')
+                    ->label('Publish')
                     ->toggleable(isToggledHiddenByDefault:false),
 
             ])

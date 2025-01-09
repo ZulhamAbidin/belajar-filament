@@ -14,7 +14,6 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->longText('konten');
             $table->foreignId('kategori_id')->constrained('kategori')->onDelete('cascade');
-            // $table->foreignId('kategori_id')->constrained()->cascadeOnDelete();
             $table->boolean('published')->default(false);
             $table->string('sampul')->nullable();
             $table->timestamps();
