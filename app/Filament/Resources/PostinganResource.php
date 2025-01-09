@@ -88,12 +88,12 @@ class PostinganResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('judul')
+                    ->label('Judul Postingana')
                     ->copyable()
                     ->copyMessage('Berhasil Menyalin')
                     ->searchable()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault:false)
-                    ,
+                    ->toggleable(isToggledHiddenByDefault:false),
                     
                 TextColumn::make('slug')
                     ->copyable()
